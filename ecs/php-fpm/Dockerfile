@@ -25,13 +25,12 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install -j$(nproc) gd zip pdo pdo_mysql opcache
 
 COPY ./ecs/php-fpm/www.conf /etc/php-fpm.d/www.conf
-COPY ./ecs/php-fpm/php.ini /usr/local/etc/php
+COPY ./ecs/php-fpm/php.ini /usr/local/etc/php/php.ini
 COPY ./ecs/php-fpm/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 WORKDIR /var/www/app
 
 COPY ./app /var/www/app
-#COPY ./app/.env.prd /var/www/app.env
 
 RUN chmod -R 777 storage
 
@@ -39,6 +38,5 @@ RUN composer install
 
 RUN npm install
 RUN npm run build
-#RUN npm run production
 
 CMD ["php-fpm", "--allow-to-run-as-root"]

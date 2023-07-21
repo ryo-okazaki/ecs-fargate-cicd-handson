@@ -18,12 +18,12 @@ git clone https://github.com/ryo-okazaki/ecs-fargate-cicd-handson.git
 
 2. 必要なパッケージをインストールし、環境を構築する
 ```
-make install
+make install-local
 ```
 
 3. ブラウザを確認する  
-   home：http://localhost:80/  
-   Car List：http://localhost:80/cars
+   home：http://localhost:8080/  
+   Car List：http://localhost:8080/cars
 
 ### 2回目以降
 ```

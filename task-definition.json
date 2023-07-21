@@ -1,0 +1,159 @@
+{
+  "family": "ecs-fargate-cicd-task-def",
+  "networkMode": "awsvpc",
+  "taskRoleArn": "arn:aws:iam::364021107285:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::364021107285:role/ecsTaskExecutionRole",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "2048",
+  "memory": "4096",
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "containerDefinitions": [
+    {
+      "name": "nginx",
+      "image": "364021107285.dkr.ecr.ap-northeast-1.amazonaws.com/ecs-fargate-cicd-nginx:latest",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "name": "nginx-80-tcp",
+          "containerPort": 80,
+          "hostPort": 80,
+          "protocol": "tcp",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-create-group": "true",
+          "awslogs-group": "/ecs/ecs-fargate-cicd-task-def",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    },
+    {
+      "name": "laravel",
+      "image": "364021107285.dkr.ecr.ap-northeast-1.amazonaws.com/ecs-fargate-cicd-laravel:latest",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "name": "laravel-9000-tcp",
+          "containerPort": 9000,
+          "hostPort": 9000,
+          "protocol": "tcp",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "mountPoints": [],
+      "secrets": [
+        {
+          "name": "APP_NAME",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/APP_NAME"
+        },
+        {
+          "name": "APP_ENV",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/APP_ENV"
+        },
+        {
+          "name": "APP_KEY",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/APP_KEY"
+        },
+        {
+          "name": "APP_DEBUG",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/APP_DEBUG"
+        },
+        {
+          "name": "APP_URL",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/APP_URL"
+        },
+        {
+          "name": "LOG_CHANNEL",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/LOG_CHANNEL"
+        },
+        {
+          "name": "LOG_DEPRECATIONS_CHANNEL",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/LOG_DEPRECATIONS_CHANNEL"
+        },
+        {
+          "name": "LOG_LEVEL",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/LOG_LEVEL"
+        },
+        {
+          "name": "DB_CONNECTION",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/DB_CONNECTION"
+        },
+        {
+          "name": "DB_HOST",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/DB_HOST"
+        },
+        {
+          "name": "DB_PORT",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/DB_PORT"
+        },
+        {
+          "name": "DB_DATABASE",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/DB_DATABASE"
+        },
+        {
+          "name": "DB_USERNAME",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/DB_USERNAME"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/DB_PASSWORD"
+        },
+        {
+          "name": "BROADCAST_DRIVER",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/BROADCAST_DRIVER"
+        },
+        {
+          "name": "CACHE_DRIVER",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/CACHE_DRIVER"
+        },
+        {
+          "name": "FILESYSTEM_DISK",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/FILESYSTEM_DISK"
+        },
+        {
+          "name": "QUEUE_CONNECTION",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/QUEUE_CONNECTION"
+        },
+        {
+          "name": "SESSION_DRIVER",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/SESSION_DRIVER"
+        },
+        {
+          "name": "SESSION_LIFETIME",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:364021107285:parameter/ecs-fargate-cicd/SESSION_LIFETIME"
+        }
+      ],
+      "volumesFrom": [],
+      "dependsOn": [
+        {
+          "containerName": "nginx",
+          "condition": "START"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-create-group": "true",
+          "awslogs-group": "/ecs/ecs-fargate-cicd-task-def",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}
